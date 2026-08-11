@@ -35,4 +35,27 @@ describe('Calculator core', () => {
     expect(core.add(1.5, 2.25)).toBeCloseTo(3.75);
     expect(core.div(7, 2)).toBeCloseTo(3.5);
   });
+
+  test('modulo operation', () => {
+    expect(core.modulo(10, 3)).toBe(1);
+    expect(core.mod(10, 3)).toBe(1); // alias
+  });
+
+  test('modulo by zero should throw', () => {
+    expect(() => core.modulo(1, 0)).toThrow(/modulo/i);
+  });
+
+  test('power operation', () => {
+    expect(core.power(2, 3)).toBe(8);
+    expect(core.pow(2, 3)).toBe(8); // alias
+  });
+
+  test('square root operation', () => {
+    expect(core.squareRoot(9)).toBe(3);
+    expect(core.sqrt(16)).toBe(4); // alias
+  });
+
+  test('square root of negative should throw', () => {
+    expect(() => core.squareRoot(-1)).toThrow(/square root/i);
+  });
 });
