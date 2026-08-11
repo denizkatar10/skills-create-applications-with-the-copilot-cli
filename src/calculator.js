@@ -40,37 +40,34 @@ if (a === null || b === null) {
   process.exit(2);
 }
 
+const core = require('./calculator-core');
+
 let result;
 
-switch (command) {
-  case 'add':
-    // Addition
-    result = a + b;
-    break;
-  case 'sub':
-    // Subtraction
-    result = a - b;
-    break;
-  case 'mul':
-    // Multiplication
-    result = a * b;
-    break;
-  case 'div':
-    // Division
-    if (b === 0) {
-      console.error('Error: division by zero.');
-      process.exit(3);
-    }
-    result = a / b;
-    break;
-  case 'help':
-  case '-h':
-  case '--help':
+// Route to core functions and handle errors consistently
+try {
+  if (['help', '-h', '--help'].includes(command)) {
     printUsage();
-    break;
-  default:
+  }
+
+  if (!['add', 'sub', 'mul', 'div'].includes(command)) {
     console.error(`Unknown command: ${command}`);
     printUsage();
+  }
+
+  result = core[command](a, b);
+} catch (err) {
+  // For known error types, present friendly messages
+  if (err instanceof RangeError) {
+    console.error('Error:', err.message);
+    process.exit(3);
+  }
+  if (err instanceof TypeError) {
+    console.error('Error: both arguments must be valid numbers.');
+    process.exit(2);
+  }
+  console.error('Error:', err.message || err);
+  process.exit(1);
 }
 
 // Print result to stdout
